@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import uz.pdp.onekhm.utils.annotation.Length;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,16 +23,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
+    @Length
     private String name;
     @NotBlank
+    @Length
     private String surname;
-    @NotBlank
+    @Length
     private String middleName;
     @NotBlank
+    //todo email
     private String email;
     @NotBlank
+    //todo phone number
     private String phoneNumber;
     @NotBlank
+    //todo password
     private String password;
     @ManyToOne
     private Role role;

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import uz.pdp.onekhm.utils.annotation.Length;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,7 +25,9 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
+    @Length
     private String code;
     @NotBlank
+    @Length
     private String description;
 }

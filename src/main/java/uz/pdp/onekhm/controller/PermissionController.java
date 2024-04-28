@@ -18,6 +18,7 @@ import uz.pdp.onekhm.service.PermissionService;
 import uz.pdp.onekhm.utils.URL;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(URL.HEAD_URL + URL.PERMISSION_URL)
@@ -38,7 +39,7 @@ public class PermissionController {
     @DeleteMapping(URL.DELETE_URL + URL.ID)
     public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
         permissionService.delete(id);
-        return ResponseEntity.ok("Successfully deleted");
+        return ResponseEntity.ok(Map.of("message","Permission successfully deleted"));
     }
 
     @GetMapping(URL.GET_URL + URL.ID)

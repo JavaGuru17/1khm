@@ -15,6 +15,8 @@ import uz.pdp.onekhm.domain.User;
 import uz.pdp.onekhm.service.UserService;
 import uz.pdp.onekhm.utils.URL;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(URL.HEAD_URL + URL.USER_URL)
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class UserController {
     @DeleteMapping(URL.DELETE_URL + URL.ID)
     public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
         userService.delete(id);
-        return ResponseEntity.ok("User deleted");
+        return ResponseEntity.ok(Map.of("message","User successfully deleted"));
     }
 
     @GetMapping(URL.GET_URL + URL.ID)

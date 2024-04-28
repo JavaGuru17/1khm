@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import uz.pdp.onekhm.utils.annotation.Length;
+import uz.pdp.onekhm.utils.annotation.Link;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,8 +24,12 @@ public class Info {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Length
     private String title;
+    @Length
     private String description;
+    @Link
     private String logoUrl;
+    //todo behzod please add email annotation
     private String email;
 }

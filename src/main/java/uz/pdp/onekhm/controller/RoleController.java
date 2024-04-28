@@ -17,6 +17,8 @@ import uz.pdp.onekhm.dto.request.RoleDto;
 import uz.pdp.onekhm.service.RoleService;
 import uz.pdp.onekhm.utils.URL;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(URL.HEAD_URL + URL.ROLE_URL)
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class RoleController {
     @DeleteMapping(URL.DELETE_URL + URL.ID)
     public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
         roleService.delete(id);
-        return ResponseEntity.ok("Successfully deleted");
+        return ResponseEntity.ok(Map.of("message","Role successfully deleted"));
     }
 
     @GetMapping(URL.GET_URL + URL.ID)

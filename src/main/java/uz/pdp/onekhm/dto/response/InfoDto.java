@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.pdp.onekhm.utils.annotation.Length;
+import uz.pdp.onekhm.utils.annotation.Link;
 
 
 import java.util.List;
@@ -16,13 +18,18 @@ import java.util.List;
 @Setter
 public class InfoDto {
     @NotBlank
+    @Length
     private String title;
     @NotBlank
+    @Length
     private String description;
     @NotBlank
+    @Link
     private String logoUrl;
     @NotBlank
+    //todo behzod please add email annotation
     private String email;
     @NotEmpty
+    //todo phonenumbers annotatiion
     private List<String> phoneNumbers;
 }

@@ -8,7 +8,9 @@ import lombok.Getter;
 @Getter
 public class UserLoginDto {
     @NotBlank
+    /// todo email
     private String email;
     @NotBlank
+    //todo password
     private String password;
 }

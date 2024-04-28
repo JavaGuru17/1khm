@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.pdp.onekhm.utils.annotation.Length;
 import uz.pdp.onekhm.utils.annotation.Link;
+import uz.pdp.onekhm.utils.annotation.PhoneNumber;
 
 
 import java.util.List;
@@ -30,6 +31,6 @@ public class InfoDto {
     //todo behzod please add email annotation
     private String email;
     @NotEmpty
-    //todo phonenumbers annotatiion
+    @PhoneNumber
     private List<String> phoneNumbers;
 }

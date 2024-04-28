@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uz.pdp.onekhm.domain.Role;
 import uz.pdp.onekhm.utils.annotation.Length;
+import uz.pdp.onekhm.utils.annotation.PhoneNumber;
 
 @AllArgsConstructor
 @Getter
@@ -17,7 +18,7 @@ public class UserDto {
     private String middleName;
     //todo email
     private String email;
-    //todo phonenumber
+    @PhoneNumber
     private String phoneNumber;
     private Role role;
 }

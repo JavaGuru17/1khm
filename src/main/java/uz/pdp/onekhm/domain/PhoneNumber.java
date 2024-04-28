@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PhoneNumber{
     @Id
-    ///todo
+    @uz.pdp.onekhm.utils.annotation.PhoneNumber
     private String phone;
 }

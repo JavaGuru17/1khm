@@ -5,19 +5,18 @@ import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.Info;
 import uz.pdp.onekhm.domain.PhoneNumber;
 import uz.pdp.onekhm.dto.response.InfoDto;
+import uz.pdp.onekhm.mapper.InfoMapper;
 import uz.pdp.onekhm.repo.InfoRepository;
 import uz.pdp.onekhm.repo.PhoneNumberRepo;
 import uz.pdp.onekhm.service.InfoService;
 import uz.pdp.onekhm.utils.Validation;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class InfoServiceImpl implements InfoService {
     private final InfoRepository infoRepository;
     private final PhoneNumberRepo phoneNumberRepo;
+    private final InfoMapper infoMapper;
 
     @Override
     public void update(InfoDto infoDto) {
@@ -41,15 +40,6 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public InfoDto getSiteInfo() {
-        Info info = infoRepository.getInfo();
-        List<String> phoneNumbers = new ArrayList<>();
-        phoneNumberRepo.findAll().forEach(p -> phoneNumbers.add(p.getPhone()));
-        return new InfoDto(
-                info.getTitle(),
-                info.getDescription(),
-                info.getLogoUrl(),
-                info.getEmail(),
-                phoneNumbers
-        );
+        return infoMapper.toDto(infoRepository.getInfo());
     }
 }

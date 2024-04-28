@@ -9,6 +9,7 @@ import uz.pdp.onekhm.dto.request.ChangeMediaDto;
 import uz.pdp.onekhm.dto.request.PostSaveDto;
 import uz.pdp.onekhm.dto.request.PostUpdateDto;
 import uz.pdp.onekhm.exception.NotFoundException;
+import uz.pdp.onekhm.mapper.PostMapper;
 import uz.pdp.onekhm.repo.CategoryRepository;
 import uz.pdp.onekhm.repo.PostRepository;
 import uz.pdp.onekhm.service.PostService;
@@ -27,27 +28,21 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+    private final PostMapper postMapper;
 
     @Override
     @SneakyThrows
     public Post save(PostSaveDto postSaveDto, MultipartFile media){
         String id = UUID.randomUUID().toString();
+        String mediaPath = postSaveDto.getMediaPath();
         if (postSaveDto.getMediaPath() == null && media != null){
             Path path = Paths.get("src", "main", "resources", "static", "media");
             Files.createDirectories(path);
             path = path.resolve(id + media.getOriginalFilename());
             Files.copy(media.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
+            mediaPath = URL.BASE_URL + URL.HEAD_URL + URL.IMG_URL + "/" + id + media.getOriginalFilename();
         }
-        return postRepository.save(
-                Post.builder()
-                        .title(postSaveDto.getTitle())
-                        .description(postSaveDto.getDescription())
-                        .mediaPath("http://localhost:8080/api/v1/img?id=" + id)
-                        .category(categoryRepository.findById(postSaveDto.getCategoryId()).orElseThrow(
-                                ()->new NotFoundException("Category with id " + postSaveDto.getCategoryId())
-                        ))
-                        .build()
-        );
+        return postRepository.save(postMapper.toEntity(postSaveDto,mediaPath));
     }
 
     @Override
@@ -104,7 +99,7 @@ public class PostServiceImpl implements PostService {
                 Files.createDirectories(path);
                 path = path.resolve(id + mediaDto.getMedia().getOriginalFilename());
                 Files.copy(mediaDto.getMedia().getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
-                post.setMediaPath(URL.BASE_URL + URL.HEAD_URL + URL.IMG_URL + "?=filename" + id);
+                post.setMediaPath(URL.BASE_URL + URL.HEAD_URL + URL.IMG_URL + "/" + id + mediaDto.getMedia().getOriginalFilename());
             }else throw new NotFoundException("Media");
         }else {
             if (mediaDto.getMedia() == null){

@@ -6,6 +6,7 @@ import uz.pdp.onekhm.domain.Category;
 import uz.pdp.onekhm.dto.request.CategoryDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.NotFoundException;
+import uz.pdp.onekhm.mapper.CategoryMapper;
 import uz.pdp.onekhm.repo.CategoryRepository;
 import uz.pdp.onekhm.service.CategoryService;
 
@@ -15,12 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
     @Override
     public Category save(CategoryDto category) {
         if (categoryRepository.findByName(category.getName().toUpperCase()).isPresent()) {
             throw new AlreadyExistsException("Category with name " + category.getName().toUpperCase());
         }
-        return categoryRepository.save(CategoryDto.toEntity(category));
+        return categoryRepository.save(categoryMapper.toEntity(category));
     }
 
     @Override

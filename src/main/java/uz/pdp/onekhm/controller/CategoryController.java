@@ -27,12 +27,12 @@ public class CategoryController {
     public ResponseEntity<?> save(@RequestBody @Valid CategoryDto category) {
         return ResponseEntity.ok(categoryService.save(category));
     }
-    @DeleteMapping(URL.DELETE_URL + URL.ID_URL)
+    @DeleteMapping(URL.DELETE_URL + URL.ID)
     public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
         categoryService.delete(id);
         return ResponseEntity.ok(Map.of("message","category successfully deleted"));
     }
-    @GetMapping(URL.ID_URL)
+    @GetMapping(URL.ID)
     public ResponseEntity<?> getById(@PathVariable @NotNull Long id) {
         return ResponseEntity.ok(categoryService.getById(id));
     }
@@ -40,7 +40,7 @@ public class CategoryController {
     public ResponseEntity<?> getAll(){
         return ResponseEntity.ok(categoryService.getAll());
     }
-    @GetMapping(URL.GET_URL + URL.NAME_URL)
+    @GetMapping(URL.GET_URL + URL.NAME)
     public ResponseEntity<?> getByName(@PathVariable @NotBlank String name) {
         return ResponseEntity.ok(categoryService.getByName(name));
     }

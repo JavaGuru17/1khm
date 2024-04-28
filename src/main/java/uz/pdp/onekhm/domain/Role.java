@@ -29,6 +29,7 @@ public class Role {
     private String code;
     private String description;
     @ManyToMany
+    @ToString.Exclude
     private List<Permission> permissions;
 }
 

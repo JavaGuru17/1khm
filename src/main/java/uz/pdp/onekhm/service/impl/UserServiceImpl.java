@@ -31,8 +31,13 @@ public class UserServiceImpl implements UserService {
     public JwtDto register(UserRegisterDto userRegisterDto) {
         if (userRepository.findByEmail(userRegisterDto.getEmail()).isPresent())
             throw new AlreadyExistsException("User with email" + userRegisterDto.getEmail());
-        User save = userRepository.save(userMapper.toEntity(userRegisterDto));
-        return new JwtDto(jwtProvider.generateToken(save));
+
+        User user = userRepository.save(userMapper.toEntity(userRegisterDto));
+
+        if (!userRegisterDto.getPassword().equals(userRegisterDto.getConfirmPassword()))
+            throw new InvalidArgumentException("Passwords do not match");
+
+        return new JwtDto(jwtProvider.generateToken(user));
     }
 
     @Override

@@ -28,7 +28,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(c->c.configurationSource(corsConfigurationSource()));
-        http.authorizeHttpRequests(a->a.requestMatchers(URL.HEAD_URL + URL.AUTH_URL).permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(a->a.requestMatchers(URL.HEAD_URL + URL.AUTH_URL + "/**").permitAll().anyRequest().authenticated());
         return http.build();
     }
     @Bean

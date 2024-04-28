@@ -1,6 +1,7 @@
 package uz.pdp.onekhm.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.pdp.onekhm.domain.User;
 import uz.pdp.onekhm.dto.request.UserRegisterDto;
@@ -12,6 +13,8 @@ import uz.pdp.onekhm.repo.RoleRepository;
 @RequiredArgsConstructor
 public class UserMapper {
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
     public UserDto toDto(User user) {
         return new UserDto(
                 user.getId(),
@@ -29,7 +32,7 @@ public class UserMapper {
                 .middleName(userDto.getMiddleName())
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
-                .password(userDto.getPassword())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .role(roleRepository.findByCode("ROLE_USER").orElseThrow(()-> new NotFoundException("Role with name USER")))
                 .build();
     }

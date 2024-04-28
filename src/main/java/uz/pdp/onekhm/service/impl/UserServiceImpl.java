@@ -1,16 +1,19 @@
 package uz.pdp.onekhm.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.User;
 import uz.pdp.onekhm.dto.request.UserLoginDto;
 import uz.pdp.onekhm.dto.request.UserRegisterDto;
+import uz.pdp.onekhm.dto.response.JwtDto;
 import uz.pdp.onekhm.dto.response.UserDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.InvalidArgumentException;
 import uz.pdp.onekhm.exception.NotFoundException;
 import uz.pdp.onekhm.mapper.UserMapper;
 import uz.pdp.onekhm.repo.UserRepository;
+import uz.pdp.onekhm.security.jwt.JwtProvider;
 import uz.pdp.onekhm.service.UserService;
 import uz.pdp.onekhm.utils.Validation;
 
@@ -21,21 +24,24 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Override
-    public UserRegisterDto register(UserRegisterDto userRegisterDto) {
+    public JwtDto register(UserRegisterDto userRegisterDto) {
         if (userRepository.findByEmail(userRegisterDto.getEmail()).isPresent())
             throw new AlreadyExistsException("User with email" + userRegisterDto.getEmail());
-        userRepository.save(userMapper.toEntity(userRegisterDto));
-        return null;
+        User save = userRepository.save(userMapper.toEntity(userRegisterDto));
+        return new JwtDto(jwtProvider.generateToken(save));
     }
 
     @Override
-    public void login(UserLoginDto userLoginDto) {
+    public JwtDto login(UserLoginDto userLoginDto) {
         User user = userRepository.findByEmail(userLoginDto.getEmail()).orElseThrow(
                 () -> new NotFoundException("User with email " + userLoginDto.getEmail()));
-        if (!user.getPassword().equals(userLoginDto.getPassword()))
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword()))
             throw new InvalidArgumentException("User with password " + userLoginDto.getPassword());
+        return new JwtDto(jwtProvider.generateToken(user));
     }
 
     @Override

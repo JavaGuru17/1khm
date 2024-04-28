@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import uz.pdp.onekhm.utils.annotation.Email;
 import uz.pdp.onekhm.utils.annotation.Length;
 import uz.pdp.onekhm.utils.annotation.Link;
 import uz.pdp.onekhm.utils.annotation.PhoneNumber;
@@ -28,7 +29,7 @@ public class InfoDto {
     @Link
     private String logoUrl;
     @NotBlank
-    //todo behzod please add email annotation
+    @Email
     private String email;
     @NotEmpty
     @PhoneNumber

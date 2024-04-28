@@ -3,6 +3,7 @@ package uz.pdp.onekhm.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uz.pdp.onekhm.domain.Role;
+import uz.pdp.onekhm.utils.annotation.Email;
 import uz.pdp.onekhm.utils.annotation.Length;
 import uz.pdp.onekhm.utils.annotation.PhoneNumber;
 
@@ -16,7 +17,7 @@ public class UserDto {
     private String surname;
     @Length
     private String middleName;
-    //todo email
+    @Email
     private String email;
     @PhoneNumber
     private String phoneNumber;

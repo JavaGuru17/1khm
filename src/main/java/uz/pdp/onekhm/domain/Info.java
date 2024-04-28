@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import uz.pdp.onekhm.utils.annotation.Email;
 import uz.pdp.onekhm.utils.annotation.Length;
 import uz.pdp.onekhm.utils.annotation.Link;
 
@@ -30,6 +31,6 @@ public class Info {
     private String description;
     @Link
     private String logoUrl;
-    //todo behzod please add email annotation
+    @Email
     private String email;
 }

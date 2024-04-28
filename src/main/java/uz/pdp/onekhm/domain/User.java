@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import uz.pdp.onekhm.utils.annotation.Email;
 import uz.pdp.onekhm.utils.annotation.Length;
+import uz.pdp.onekhm.utils.annotation.Password;
 import uz.pdp.onekhm.utils.annotation.PhoneNumber;
 
 @AllArgsConstructor
@@ -32,13 +34,13 @@ public class User {
     @Length
     private String middleName;
     @NotBlank
-    //todo email
+    @Email
     private String email;
     @NotBlank
     @PhoneNumber
     private String phoneNumber;
     @NotBlank
-    //todo password
+    @Password
     private String password;
     @ManyToOne
     private Role role;

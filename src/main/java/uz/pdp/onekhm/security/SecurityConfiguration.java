@@ -9,9 +9,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import uz.pdp.onekhm.security.jwt.JwtTokenFilter;
 import uz.pdp.onekhm.utils.URL;
 
 import java.util.List;
@@ -25,10 +27,11 @@ public class SecurityConfiguration {
     }
     @Bean
     @SneakyThrows
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenFilter jwtTokenFilter) {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(c->c.configurationSource(corsConfigurationSource()));
         http.authorizeHttpRequests(a->a.requestMatchers(URL.HEAD_URL + URL.AUTH_URL + "/**").permitAll().anyRequest().authenticated());
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
     @Bean

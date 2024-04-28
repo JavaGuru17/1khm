@@ -8,7 +8,7 @@ import uz.pdp.onekhm.dto.request.CategoryDto;
 public class CategoryMapper {
     public Category toEntity(CategoryDto categoryDto){
         return Category.builder()
-                .name(categoryDto.getName())
+                .name(categoryDto.getName().toUpperCase())
                 .description(categoryDto.getDescription())
                 .build();
     }

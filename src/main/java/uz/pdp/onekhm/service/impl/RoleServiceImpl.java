@@ -2,53 +2,36 @@ package uz.pdp.onekhm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uz.pdp.onekhm.domain.Permission;
 import uz.pdp.onekhm.domain.Role;
 import uz.pdp.onekhm.dto.request.RoleDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.NotFoundException;
-import uz.pdp.onekhm.repo.PermissionRepository;
+import uz.pdp.onekhm.mapper.RoleMapper;
 import uz.pdp.onekhm.repo.RoleRepository;
 import uz.pdp.onekhm.service.RoleService;
 import uz.pdp.onekhm.utils.Validation;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
+    private final RoleMapper roleMapper;
 
     @Override
     public RoleDto save(RoleDto roleDto) {
         if (roleRepository.existsById(roleDto.getId()))
             throw new AlreadyExistsException("Role with id " + roleDto.getId());
-
         if (roleRepository.findByCode(roleDto.getCode()).isPresent())
             throw new AlreadyExistsException("Role with code " + roleDto.getCode());
-
-        Role role = Role.builder()
-                .id(roleDto.getId())
-                .code(roleDto.getCode())
-                .description(roleDto.getDescription())
-                .build();
-
-        List<Permission> permissions = new ArrayList<>();
-        for (Long id : roleDto.getPermissions()) {
-            permissionRepository.findById(id).ifPresent(permissions::add);
-        }
-        role.setPermissions(permissions);
-
-        return new RoleDto(roleRepository.save(role));
+        return roleMapper.toDto(roleRepository.save(roleMapper.toEntity(roleDto)));
     }
 
     @Override
     public RoleDto update(RoleDto roleDto) {
         Role existingRole = roleRepository.findById(roleDto.getId())
                 .orElseThrow(() -> new NotFoundException("Role with id " + roleDto.getId()));
-
         Role updatedRole = Role.builder()
                 .id(existingRole.getId())
                 .code(Validation.requireNonNullElse(roleDto.getCode(), existingRole.getCode()))
@@ -56,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
                 .build();
 
         Role role = roleRepository.save(updatedRole);
-        return new RoleDto(role);
+        return roleMapper.toDto(role);
     }
 
     @Override
@@ -72,18 +55,18 @@ public class RoleServiceImpl implements RoleService {
             throw new NotFoundException("Role with id " + id);
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Role with id " + id));
-        return new RoleDto(role);
+        return roleMapper.toDto(role);
     }
 
     @Override
     public List<RoleDto> getAll() {
-        return roleRepository.findAll().stream().map(RoleDto::new).toList();
+        return roleRepository.findAll().stream().map(roleMapper::toDto).toList();
     }
 
     @Override
     public RoleDto findByCode(String code) {
         Role role = roleRepository.findByCode(code)
                 .orElseThrow(() -> new NotFoundException("Role with code " + code));
-        return new RoleDto(role);
+        return roleMapper.toDto(role);
     }
 }

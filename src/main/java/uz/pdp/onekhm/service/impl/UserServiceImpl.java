@@ -9,6 +9,7 @@ import uz.pdp.onekhm.dto.response.UserDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.InvalidArgumentException;
 import uz.pdp.onekhm.exception.NotFoundException;
+import uz.pdp.onekhm.mapper.UserMapper;
 import uz.pdp.onekhm.repo.UserRepository;
 import uz.pdp.onekhm.service.UserService;
 import uz.pdp.onekhm.utils.Validation;
@@ -19,21 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserRegisterDto register(UserRegisterDto userRegisterDto) {
         if (userRepository.findByEmail(userRegisterDto.getEmail()).isPresent())
-            throw new AlreadyExistsException("User with this email already exists");
-
-        User user = userRepository.save(User.builder()
-                .name(userRegisterDto.getName())
-                .surname(userRegisterDto.getSurname())
-                .middleName(userRegisterDto.getMiddleName())
-                .email(userRegisterDto.getEmail())
-                .phoneNumber(userRegisterDto.getPhoneNumber())
-                .password(userRegisterDto.getPassword())
-                .build());
-        return new UserRegisterDto(user);
+            throw new AlreadyExistsException("User with email" + userRegisterDto.getEmail());
+        userRepository.save(userMapper.toEntity(userRegisterDto));
+        return null;
     }
 
     @Override
@@ -76,30 +70,30 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User with id " + id);
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User with id " + id));
-        return new UserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
     public List<UserDto> getAll() {
-        return userRepository.findAll().stream().map(UserDto::new).toList();
+        return userRepository.findAll().stream().map(userMapper::toDto).toList();
     }
 
     @Override
     public List<UserDto> getAllByRole(String code) {
-        return userRepository.findAllByRoleCode(code).stream().map(UserDto::new).toList();
+        return userRepository.findAllByRoleCode(code).stream().map(userMapper::toDto).toList();
     }
 
     @Override
     public UserDto getByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User with email " + email));
-        return new UserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
     public UserDto getByPhoneNumber(String phoneNumber) {
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new NotFoundException("User with phone number " + phoneNumber));
-        return new UserDto(user);
+        return userMapper.toDto(user);
     }
 }

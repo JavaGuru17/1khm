@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import uz.pdp.onekhm.domain.Role;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,11 +19,4 @@ public class RoleDto {
     @ManyToMany
     @ToString.Exclude
     private List<Long> permissions;
-
-    public RoleDto(Role role) {
-        this.id = role.getId();
-        this.code = role.getCode();
-        this.description = role.getDescription();
-        this.permissions = new ArrayList<>();
-    }
 }

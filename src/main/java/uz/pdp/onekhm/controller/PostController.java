@@ -37,12 +37,12 @@ public class PostController {
     public ResponseEntity<?> update(@RequestBody PostUpdateDto postUpdateDto) {
         return ResponseEntity.ok(postService.update(postUpdateDto));
     }
-    @DeleteMapping(URL.DELETE_URL + URL.ID_URL)
+    @DeleteMapping(URL.DELETE_URL + URL.ID)
     public ResponseEntity<?> delete(@PathVariable Long id) {
         postService.delete(id);
         return ResponseEntity.ok(Map.of("message","Product successfully deleted"));
     }
-    @GetMapping(URL.GET_URL + URL.ID_URL)
+    @GetMapping(URL.GET_URL + URL.ID)
     public ResponseEntity<?> getById(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getById(id));
     }
@@ -50,7 +50,7 @@ public class PostController {
     public ResponseEntity<?> getAll(){
         return ResponseEntity.ok(postService.getAll());
     }
-    @GetMapping(URL.GET_URL + URL.CATEGORY_URL + URL.ID_URL)
+    @GetMapping(URL.GET_URL + URL.CATEGORY_URL + URL.ID)
     public ResponseEntity<?> getByCategoryId(@PathVariable Long id) {
         return ResponseEntity.ok(postService.getAllByCategoryId(id));
     }

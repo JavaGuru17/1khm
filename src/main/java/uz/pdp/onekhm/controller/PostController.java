@@ -1,6 +1,8 @@
 package uz.pdp.onekhm.controller;
 
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +25,20 @@ import java.util.Map;
 public class PostController {
     private final PostService postService;
     @PostMapping(value =URL.SAVE_URL,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> save(@RequestPart("file") MultipartFile file,@RequestPart("postSaveDto") PostSaveDto postSaveDto) {
+    public ResponseEntity<?> save(@RequestPart("file") @Valid MultipartFile file,@RequestPart("postSaveDto") @Valid PostSaveDto postSaveDto) {
         return ResponseEntity.ok(postService.save(postSaveDto, file));
     }
     @PatchMapping(URL.UPDATE_URL)
-    public ResponseEntity<?> update(@RequestBody PostUpdateDto postUpdateDto) {
+    public ResponseEntity<?> update(@RequestBody @Valid PostUpdateDto postUpdateDto) {
         return ResponseEntity.ok(postService.update(postUpdateDto));
     }
     @DeleteMapping(URL.DELETE_URL + URL.ID)
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
         postService.delete(id);
         return ResponseEntity.ok(Map.of("message","Product successfully deleted"));
     }
     @GetMapping(URL.GET_URL + URL.ID)
-    public ResponseEntity<?> getById(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable @NotNull Long id) {
         return ResponseEntity.ok(postService.getById(id));
     }
     @GetMapping(URL.GET_ALL_URL)
@@ -44,7 +46,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getAll());
     }
     @GetMapping(URL.GET_URL + URL.CATEGORY_URL + URL.ID)
-    public ResponseEntity<?> getByCategoryId(@PathVariable Long id) {
+    public ResponseEntity<?> getByCategoryId(@PathVariable @NotNull Long id) {
         return ResponseEntity.ok(postService.getAllByCategoryId(id));
     }
     @GetMapping(URL.GET_URL + URL.POST_TYPE_URL + "/{postType}")

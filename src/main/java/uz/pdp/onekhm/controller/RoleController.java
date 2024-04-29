@@ -55,4 +55,10 @@ public class RoleController {
     public ResponseEntity<?> get(@PathVariable @NotBlank String code) {
         return ResponseEntity.ok(roleService.findByCode(code));
     }
+
+    @PostMapping(URL.CHANGE_ROLE_URL)
+    public ResponseEntity<?> changeRole(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long roleId) {
+        roleService.changeRole(roleId, userId);
+        return ResponseEntity.ok(Map.of("message","Role successfully changed"));
+    }
 }

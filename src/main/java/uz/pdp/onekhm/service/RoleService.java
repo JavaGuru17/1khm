@@ -13,4 +13,5 @@ public interface RoleService {
     RoleDto getById(Long id);
     List<RoleDto> getAll();
     RoleDto findByCode(String code);
+    void changeRole(Long roleId, Long userId);
 }

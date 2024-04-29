@@ -1,5 +1,6 @@
 package uz.pdp.onekhm.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import java.util.Map;
 public class InfoController {
     private final InfoService infoService;
     @PatchMapping(URL.UPDATE_URL)
-    public ResponseEntity<?> update(@RequestBody InfoDto infoDto) {
+    public ResponseEntity<?> update(@RequestBody @Valid InfoDto infoDto) {
         infoService.update(infoDto);
         return ResponseEntity.ok(Map.of("message","Info successfully updated"));
     }

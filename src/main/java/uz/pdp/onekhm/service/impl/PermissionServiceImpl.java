@@ -3,9 +3,11 @@ package uz.pdp.onekhm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.Permission;
+import uz.pdp.onekhm.domain.Role;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.NotFoundException;
 import uz.pdp.onekhm.repo.PermissionRepository;
+import uz.pdp.onekhm.repo.RoleRepository;
 import uz.pdp.onekhm.service.PermissionService;
 import uz.pdp.onekhm.utils.Validation;
 
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
+    private final RoleRepository roleRepository;
 
     @Override
     public Permission save(Permission permission) {
@@ -65,5 +68,21 @@ public class PermissionServiceImpl implements PermissionService {
     public Permission findByCode(String code) {
         return permissionRepository.findByCode(code)
                 .orElseThrow(() -> new NotFoundException("Permission with code " + code));
+    }
+
+    @Override
+    public void addToRole(Long roleId, Long permissionId) {
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new NotFoundException("Role with id " + roleId));
+        Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new NotFoundException("Permission with id " + permissionId));
+        role.getPermissions().add(permission);
+        roleRepository.save(role);
+    }
+
+    @Override
+    public void removeFromRole(Long roleId, Long permissionId) {
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new NotFoundException("Role with id " + roleId));
+        Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new NotFoundException("Permission with id " + permissionId));
+        role.getPermissions().remove(permission);
+        roleRepository.save(role);
     }
 }

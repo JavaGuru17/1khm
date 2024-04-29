@@ -3,11 +3,13 @@ package uz.pdp.onekhm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.Role;
+import uz.pdp.onekhm.domain.User;
 import uz.pdp.onekhm.dto.request.RoleDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.NotFoundException;
 import uz.pdp.onekhm.mapper.RoleMapper;
 import uz.pdp.onekhm.repo.RoleRepository;
+import uz.pdp.onekhm.repo.UserRepository;
 import uz.pdp.onekhm.service.RoleService;
 import uz.pdp.onekhm.utils.Validation;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
+    private final UserRepository userRepository;
 
     @Override
     public RoleDto save(RoleDto roleDto) {
@@ -68,5 +71,13 @@ public class RoleServiceImpl implements RoleService {
         Role role = roleRepository.findByCode(code)
                 .orElseThrow(() -> new NotFoundException("Role with code " + code));
         return roleMapper.toDto(role);
+    }
+
+    @Override
+    public void changeRole(Long roleId, Long userId){
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new NotFoundException("Role with id " + roleId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with id " + userId));
+        user.setRole(role);
+        userRepository.save(user);
     }
 }

@@ -1,5 +1,6 @@
 package uz.pdp.onekhm.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,7 +20,7 @@ import java.nio.file.Paths;
 @RequestMapping(URL.HEAD_URL + URL.IMG_URL)
 public class ImgController {
     @GetMapping("{filename}")
-    public ResponseEntity<?> download(@PathVariable String filename) {
+    public ResponseEntity<?> download(@PathVariable @NotBlank String filename) {
         try {
             Path path = Paths.get("src/main/resources/static/media/" + filename);
             HttpHeaders headers = new HttpHeaders();

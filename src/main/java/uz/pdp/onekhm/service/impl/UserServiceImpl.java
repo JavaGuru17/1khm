@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.User;
 import uz.pdp.onekhm.dto.request.UserLoginDto;
 import uz.pdp.onekhm.dto.request.UserRegisterDto;
+import uz.pdp.onekhm.dto.request.UserUpdateDto;
 import uz.pdp.onekhm.dto.response.JwtDto;
 import uz.pdp.onekhm.dto.response.UserDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
@@ -49,19 +50,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
+    public User update(UserUpdateDto user) {
         User existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NotFoundException("User"));
+
+        if (user.getEmail() != null)
+            userRepository.findByEmail(user.getEmail()).ifPresent((e) -> {
+                throw new AlreadyExistsException("User with email " + e.getEmail());
+            });
+        if (user.getPhoneNumber() != null)
+            userRepository.findByPhoneNumber(user.getPhoneNumber()).ifPresent((e) -> {
+                throw new AlreadyExistsException("User with phone number " + e.getPhoneNumber());
+            });
 
         User updatedUser = User.builder()
                 .id(existingUser.getId())
                 .name(Validation.requireNonNullElse(user.getName(), existingUser.getName()))
                 .surname(Validation.requireNonNullElse(user.getSurname(), existingUser.getSurname()))
-                .middleName(Validation.requireNonNullElse(user.getMiddleName(), existingUser.getMiddleName()))
                 .email(Validation.requireNonNullElse(user.getEmail(), existingUser.getEmail()))
+                .middleName(Validation.requireNonNullElse(user.getMiddleName(), existingUser.getMiddleName()))
                 .phoneNumber(Validation.requireNonNullElse(user.getPhoneNumber(), existingUser.getPhoneNumber()))
-                .password(Validation.requireNonNullElse(user.getPassword(), existingUser.getPassword()))
-                .role(Validation.requireNonNullElse(user.getRole(), existingUser.getRole()))
+                .password(user.getPassword() != null ? passwordEncoder.encode(user.getPassword()) : existingUser.getPassword())
+                .role(existingUser.getRole())
                 .build();
 
         return userRepository.save(updatedUser);

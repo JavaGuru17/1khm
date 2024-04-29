@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.pdp.onekhm.domain.User;
+import uz.pdp.onekhm.dto.request.UserUpdateDto;
 import uz.pdp.onekhm.service.UserService;
 import uz.pdp.onekhm.utils.URL;
 
@@ -24,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PatchMapping(URL.UPDATE_URL)
-    public ResponseEntity<?> update(@RequestBody @Valid User user) {
+    public ResponseEntity<?> update(@RequestBody @Valid UserUpdateDto user) {
         return ResponseEntity.ok(userService.update(user));
     }
 

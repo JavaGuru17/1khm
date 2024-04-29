@@ -13,4 +13,6 @@ public interface PermissionService {
     Permission getById(Long id);
     List<Permission> getAll();
     Permission findByCode(String code);
+    void addToRole(Long roleId, Long permissionId);
+    void removeFromRole(Long roleId, Long permissionId);
 }

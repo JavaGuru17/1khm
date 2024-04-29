@@ -17,7 +17,6 @@ import uz.pdp.onekhm.domain.Permission;
 import uz.pdp.onekhm.service.PermissionService;
 import uz.pdp.onekhm.utils.URL;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,33 +26,45 @@ public class PermissionController {
     private final PermissionService permissionService;
 
     @PostMapping(URL.SAVE_URL)
-    public Permission save(@RequestBody @Valid Permission permission) {
-        return permissionService.save(permission);
+    public ResponseEntity<?> save(@RequestBody @Valid Permission permission) {
+        return ResponseEntity.ok(permissionService.save(permission));
     }
 
     @PatchMapping(URL.UPDATE_URL)
-    public Permission update(@RequestBody @Valid Permission permission) {
-        return permissionService.update(permission);
+    public ResponseEntity<?> update(@RequestBody @Valid Permission permission) {
+        return ResponseEntity.ok(permissionService.update(permission));
     }
 
     @DeleteMapping(URL.DELETE_URL + URL.ID)
     public ResponseEntity<?> delete(@PathVariable @NotNull Long id) {
         permissionService.delete(id);
-        return ResponseEntity.ok(Map.of("message","Permission successfully deleted"));
+        return ResponseEntity.ok(Map.of("message", "Permission successfully deleted"));
     }
 
     @GetMapping(URL.GET_URL + URL.ID)
-    public Permission get(@PathVariable @NotNull Long id) {
-        return permissionService.getById(id);
+    public ResponseEntity<?> get(@PathVariable @NotNull Long id) {
+        return ResponseEntity.ok(permissionService.getById(id));
     }
 
     @GetMapping(URL.GET_ALL_URL)
-    public List<Permission> getAll() {
-        return permissionService.getAll();
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(permissionService.getAll());
     }
 
     @GetMapping(URL.GET_URL + URL.CODE_URL)
-    public Permission getCode(@PathVariable @NotBlank String code) {
-        return permissionService.findByCode(code);
+    public ResponseEntity<?> getCode(@PathVariable @NotBlank String code) {
+        return ResponseEntity.ok(permissionService.findByCode(code));
+    }
+
+    @PostMapping(URL.ADD_PERMISSION_URL)
+    public ResponseEntity<?> addPermission(@PathVariable @NotNull Long permissionId, @PathVariable @NotNull Long roleId) {
+        permissionService.addToRole(roleId, permissionId);
+        return ResponseEntity.ok(Map.of("message", "Permission successfully added"));
+    }
+
+    @PostMapping(URL.REMOVE_PERMISSION_URL)
+    public ResponseEntity<?> removePermission(@PathVariable @NotNull Long permissionId, @PathVariable @NotNull Long roleId) {
+        permissionService.removeFromRole(roleId, permissionId);
+        return ResponseEntity.ok(Map.of("message", "Permission successfully removed"));
     }
 }

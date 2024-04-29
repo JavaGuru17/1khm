@@ -33,7 +33,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenFilter jwtTokenFilter) {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(c->c.configurationSource(corsConfigurationSource()));
-        http.authorizeHttpRequests(a->a.requestMatchers(URL.HEAD_URL + URL.AUTH_URL + "/**").permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(a->a.requestMatchers(
+                URL.HEAD_URL + URL.AUTH_URL + "/**",
+                URL.SWAGGER_URL + "/**",
+                URL.API_DOCS + "/**"
+        ).permitAll().anyRequest().authenticated());
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

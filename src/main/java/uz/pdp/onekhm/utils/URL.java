@@ -26,4 +26,7 @@ public class URL {
     public static final String NAME = "/{name}";
     public static final String UPDATE_URL = "/update";
     public static final String IMG_URL = "/img";
+    public static final String SWAGGER_URL = "swagger-ui";
+    public static final String API_DOCS = "/v3/api-docs";
+    public static final String POST_TYPE_URL = "/postType";
 }

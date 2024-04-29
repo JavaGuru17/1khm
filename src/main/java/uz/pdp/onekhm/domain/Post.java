@@ -1,16 +1,13 @@
 package uz.pdp.onekhm.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import uz.pdp.onekhm.domain.enums.PostType;
 import uz.pdp.onekhm.utils.annotation.Length;
 import uz.pdp.onekhm.utils.annotation.Link;
 
@@ -32,6 +29,8 @@ public class Post extends Auditing{
     private String description;
     @Link
     private String mediaPath;
+    @Enumerated(EnumType.STRING)
+    private PostType postType;
     @ManyToOne
     private Category category;
 }

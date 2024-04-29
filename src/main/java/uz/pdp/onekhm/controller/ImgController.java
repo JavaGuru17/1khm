@@ -23,7 +23,7 @@ public class ImgController {
         try {
             Path path = Paths.get("src/main/resources/static/media/" + filename);
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_PNG);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             InputStreamResource resource = new InputStreamResource(Files.newInputStream(path));
             return ResponseEntity.ok()
                     .headers(headers)

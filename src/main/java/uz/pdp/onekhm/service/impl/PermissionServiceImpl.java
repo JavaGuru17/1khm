@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.Permission;
 import uz.pdp.onekhm.domain.Role;
+import uz.pdp.onekhm.dto.request.PermissionDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.NotFoundException;
+import uz.pdp.onekhm.mapper.PermissionMapper;
 import uz.pdp.onekhm.repo.PermissionRepository;
 import uz.pdp.onekhm.repo.RoleRepository;
 import uz.pdp.onekhm.service.PermissionService;
@@ -18,30 +20,30 @@ import java.util.List;
 public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
     private final RoleRepository roleRepository;
+    private final PermissionMapper permissionMapper;
 
     @Override
-    public Permission save(Permission permission) {
-        if (permissionRepository.existsById(permission.getId()))
-            throw new AlreadyExistsException("Permission with id " + permission.getId());
+    public PermissionDto save(PermissionDto permissionDto) {
+        if (permissionRepository.findByCode(permissionDto.getCode().toUpperCase()).isPresent())
+            throw new AlreadyExistsException("Permission");
 
-        if (permissionRepository.findByCode(permission.getCode()).isPresent())
-            throw new AlreadyExistsException("Permission already exists");
+        permissionRepository.save(permissionMapper.toEntity(permissionDto));
 
-        return permissionRepository.save(permission);
+        return permissionDto;
     }
 
     @Override
-    public Permission update(Permission permission) {
-        Permission existingPermission = permissionRepository.findById(permission.getId())
-                .orElseThrow(() -> new NotFoundException("Permission with id " + permission.getId()));
+    public PermissionDto update(PermissionDto permissionDto) {
+        Permission existingPermission = permissionRepository.findById(permissionDto.getId())
+                .orElseThrow(() -> new NotFoundException("Permission with id " + permissionDto.getId()));
 
         Permission updatedPermission = Permission.builder()
                 .id(existingPermission.getId())
-                .code(Validation.requireNonNullElse(permission.getCode(), existingPermission.getCode()))
-                .description(Validation.requireNonNullElse(permission.getDescription(), existingPermission.getDescription()))
+                .code(Validation.requireNonNullElse(permissionDto.getCode().toUpperCase(), existingPermission.getCode()))
+                .description(Validation.requireNonNullElse(permissionDto.getDescription(), existingPermission.getDescription()))
                 .build();
 
-        return permissionRepository.save(updatedPermission);
+        return permissionMapper.toDto(permissionRepository.save(updatedPermission));
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.Role;
 import uz.pdp.onekhm.domain.User;
 import uz.pdp.onekhm.dto.request.RoleDto;
+import uz.pdp.onekhm.dto.request.RoleUpdateDto;
 import uz.pdp.onekhm.exception.AlreadyExistsException;
 import uz.pdp.onekhm.exception.NotFoundException;
 import uz.pdp.onekhm.mapper.RoleMapper;
@@ -24,7 +25,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDto save(RoleDto roleDto) {
-        if (roleRepository.existsById(roleDto.getId()))
+        if (roleDto.getId() != null)
             throw new AlreadyExistsException("Role with id " + roleDto.getId());
         if (roleRepository.findByCode(roleDto.getCode()).isPresent())
             throw new AlreadyExistsException("Role with code " + roleDto.getCode());
@@ -32,7 +33,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDto update(RoleDto roleDto) {
+    public RoleDto update(RoleUpdateDto roleDto) {
         Role existingRole = roleRepository.findById(roleDto.getId())
                 .orElseThrow(() -> new NotFoundException("Role with id " + roleDto.getId()));
         Role updatedRole = Role.builder()

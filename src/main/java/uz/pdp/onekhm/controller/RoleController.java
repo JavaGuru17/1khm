@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.pdp.onekhm.dto.request.RoleDto;
+import uz.pdp.onekhm.dto.request.RoleUpdateDto;
 import uz.pdp.onekhm.service.RoleService;
 import uz.pdp.onekhm.utils.URL;
 
@@ -31,7 +32,7 @@ public class RoleController {
     }
 
     @PatchMapping(URL.UPDATE_URL)
-    public ResponseEntity<?> update(@RequestBody @Valid RoleDto roleDto) {
+    public ResponseEntity<?> update(@RequestBody @Valid RoleUpdateDto roleDto) {
         return ResponseEntity.ok(roleService.update(roleDto));
     }
 
@@ -57,7 +58,7 @@ public class RoleController {
     }
 
     @PostMapping(URL.CHANGE_ROLE_URL)
-    public ResponseEntity<?> changeRole(@PathVariable @NotNull Long userId, @PathVariable @NotNull Long roleId) {
+    public ResponseEntity<?> changeRole(@PathVariable @NotNull Long roleId, @PathVariable @NotNull Long userId) {
         roleService.changeRole(roleId, userId);
         return ResponseEntity.ok(Map.of("message","Role successfully changed"));
     }

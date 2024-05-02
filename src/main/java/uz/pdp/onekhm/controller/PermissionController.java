@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.pdp.onekhm.domain.Permission;
+import uz.pdp.onekhm.dto.request.PermissionDto;
 import uz.pdp.onekhm.service.PermissionService;
 import uz.pdp.onekhm.utils.URL;
 
@@ -26,13 +26,13 @@ public class PermissionController {
     private final PermissionService permissionService;
 
     @PostMapping(URL.SAVE_URL)
-    public ResponseEntity<?> save(@RequestBody @Valid Permission permission) {
+    public ResponseEntity<?> save(@RequestBody @Valid PermissionDto permission) {
         return ResponseEntity.ok(permissionService.save(permission));
     }
 
     @PatchMapping(URL.UPDATE_URL)
-    public ResponseEntity<?> update(@RequestBody @Valid Permission permission) {
-        return ResponseEntity.ok(permissionService.update(permission));
+    public ResponseEntity<?> update(@RequestBody @Valid PermissionDto permissionDto) {
+        return ResponseEntity.ok(permissionService.update(permissionDto));
     }
 
     @DeleteMapping(URL.DELETE_URL + URL.ID)
@@ -57,13 +57,13 @@ public class PermissionController {
     }
 
     @PostMapping(URL.ADD_PERMISSION_URL)
-    public ResponseEntity<?> addPermission(@PathVariable @NotNull Long permissionId, @PathVariable @NotNull Long roleId) {
+    public ResponseEntity<?> addPermission(@PathVariable @NotNull Long roleId, @PathVariable @NotNull Long permissionId) {
         permissionService.addToRole(roleId, permissionId);
         return ResponseEntity.ok(Map.of("message", "Permission successfully added"));
     }
 
     @PostMapping(URL.REMOVE_PERMISSION_URL)
-    public ResponseEntity<?> removePermission(@PathVariable @NotNull Long permissionId, @PathVariable @NotNull Long roleId) {
+    public ResponseEntity<?> removePermission(@PathVariable @NotNull Long roleId, @PathVariable @NotNull Long permissionId) {
         permissionService.removeFromRole(roleId, permissionId);
         return ResponseEntity.ok(Map.of("message", "Permission successfully removed"));
     }

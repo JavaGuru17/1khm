@@ -2,13 +2,14 @@ package uz.pdp.onekhm.service;
 
 import org.springframework.stereotype.Service;
 import uz.pdp.onekhm.domain.Permission;
+import uz.pdp.onekhm.dto.request.PermissionDto;
 
 import java.util.List;
 
 @Service
 public interface PermissionService {
-    Permission save(Permission permission);
-    Permission update(Permission permission);
+    PermissionDto save(PermissionDto permissionDto);
+    PermissionDto update(PermissionDto permissionDto);
     void delete(Long id);
     Permission getById(Long id);
     List<Permission> getAll();

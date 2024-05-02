@@ -3,6 +3,7 @@ package uz.pdp.onekhm.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import uz.pdp.onekhm.domain.Role;
 import uz.pdp.onekhm.utils.annotation.Email;
 import uz.pdp.onekhm.utils.annotation.Length;
 import uz.pdp.onekhm.utils.annotation.Password;
@@ -29,4 +30,5 @@ public class UserRegisterDto {
     private String password;
     @NotBlank
     private String confirmPassword;
+    private Role role;
 }

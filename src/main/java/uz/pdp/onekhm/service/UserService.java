@@ -14,7 +14,7 @@ import java.util.List;
 public interface UserService {
     JwtDto register(UserRegisterDto userRegisterDto);
     JwtDto login(UserLoginDto userLoginDto);
-    User update(UserUpdateDto user);
+    User update(UserUpdateDto userUpdateDto);
     void delete(Long id);
     UserDto getById(Long id);
     List<UserDto> getAll();

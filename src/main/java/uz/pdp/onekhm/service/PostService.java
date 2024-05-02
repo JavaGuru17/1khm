@@ -17,5 +17,6 @@ public interface PostService {
     Post getById(Long id);
     List<Post> getAll();
     List<Post> getAllByCategoryId(Long id);
-    void changeMedia(ChangeMediaDto mediaDto);
+    List<Post> getAllByPostType(String postType);
+    void changeMedia(MultipartFile file,ChangeMediaDto mediaDto);
 }

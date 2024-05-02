@@ -87,22 +87,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getAllByPostType(String postType) {
+        return postRepository.findAllByPostType(postType);
+    }
+
+    @Override
     @SneakyThrows
-    public void changeMedia(ChangeMediaDto mediaDto) {
+    public void changeMedia(MultipartFile file, ChangeMediaDto mediaDto) {
         Post post = postRepository.findById(mediaDto.getId()).orElseThrow(
                 () -> new NotFoundException("Post with id " + mediaDto.getId())
         );
         if (mediaDto.getMediaUrl() == null) {
-            if (mediaDto.getMedia() != null){
+            if (file != null){
                 String id = UUID.randomUUID().toString();
                 Path path = Paths.get("src", "main", "resources", "static", "media");
                 Files.createDirectories(path);
-                path = path.resolve(id + mediaDto.getMedia().getOriginalFilename());
-                Files.copy(mediaDto.getMedia().getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
-                post.setMediaPath(URL.BASE_URL + URL.HEAD_URL + URL.IMG_URL + "/" + id + mediaDto.getMedia().getOriginalFilename());
+                path = path.resolve(id + file.getOriginalFilename());
+                Files.copy(file.getInputStream(),path, StandardCopyOption.REPLACE_EXISTING);
+                post.setMediaPath(URL.BASE_URL + URL.HEAD_URL + URL.IMG_URL + "/" + id + file.getOriginalFilename());
             }else throw new NotFoundException("Media");
         }else {
-            if (mediaDto.getMedia() == null){
+            if (file == null){
                 post.setMediaPath(mediaDto.getMediaUrl());
             }else throw new NotFoundException("Media");
         }

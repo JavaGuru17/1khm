@@ -29,4 +29,5 @@ public class URL {
     public static final String CHANGE_ROLE_URL = "/changeRole/{roleId}/{userId}";
     public static final String ADD_PERMISSION_URL = "/addPermission/{roleId}/{permissionId}";
     public static final String REMOVE_PERMISSION_URL = "/removePermission/{roleId}/{permissionId}";
+    public static final String GET_ALL_BY_POST_TYPE_URL = "/getAllByPostType/{postType}";
 }

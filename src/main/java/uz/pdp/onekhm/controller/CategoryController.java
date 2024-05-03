@@ -42,6 +42,6 @@ public class CategoryController {
     }
     @GetMapping(URL.GET_URL + URL.NAME)
     public ResponseEntity<?> getByName(@PathVariable @NotBlank String name) {
-        return ResponseEntity.ok(categoryService.getByName(name));
+        return ResponseEntity.ok(categoryService.getByName(name.toUpperCase()));
     }
 }

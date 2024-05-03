@@ -33,7 +33,7 @@ import java.util.Map;
 public class PostController {
     private final PostService postService;
     @PostMapping(value =URL.SAVE_URL,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> save(@RequestPart("file") @Valid MultipartFile file,@RequestPart("postSaveDto") @Valid PostSaveDto postSaveDto) {
+    public ResponseEntity<?> save(@RequestPart(value = "file",required = false) @Valid MultipartFile file,@RequestPart("postSaveDto") @Valid PostSaveDto postSaveDto) {
         return ResponseEntity.ok(postService.save(postSaveDto, file));
     }
     @PatchMapping(URL.UPDATE_URL)
@@ -57,12 +57,12 @@ public class PostController {
     public ResponseEntity<?> getByCategoryId(@PathVariable @NotNull Long id) {
         return ResponseEntity.ok(postService.getAllByCategoryId(id));
     }
-    @GetMapping(URL.GET_URL + URL.GET_ALL_BY_POST_TYPE_URL)
-    public ResponseEntity<?> getAllByPostType(@PathVariable String postType) {
+    @GetMapping(URL.GET_URL + URL.POST_TYPE_URL + "/{postType}")
+    public ResponseEntity<?> getByPostTypeId(@PathVariable String postType) {
         return ResponseEntity.ok(postService.getAllByPostType(postType));
     }
-    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
-    public void changePostMedia(@RequestPart("file") MultipartFile file, @RequestPart ChangeMediaDto changeMediaDto) {
+    @PostMapping(value = URL.CHANGE_MEDIA_URL, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public void changePostMedia(@RequestPart(value = "file",required = false) MultipartFile file, @RequestPart ChangeMediaDto changeMediaDto) {
         postService.changeMedia(file,changeMediaDto);
     }
 }
